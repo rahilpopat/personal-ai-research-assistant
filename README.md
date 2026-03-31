@@ -29,7 +29,7 @@ A personal agent that reads your GitHub commits and tells you
 what you should have built differently.
 ```
  
-Every morning at 07:00 UTC this pipeline runs automatically and sends you an email like this:
+Every morning at 07:00 am this pipeline runs automatically and sends you an email like this:
  
 ```
 🔧 smolagents — a minimal Python framework for building AI agents
