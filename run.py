@@ -42,37 +42,55 @@ def parse_args() -> argparse.Namespace:
 
 
 def run(dry_run: bool = True) -> None:
-    """Run the full pipeline: monitor → score → synthesise → digest."""
+    """Run the full pipeline: monitor -> score -> synthesise -> digest."""
     start = datetime.now()
     logger.info("=== AI Research Assistant — pipeline start ===")
     logger.info("Mode: %s", "DRY RUN" if dry_run else "LIVE")
 
-    # Stage 1: Monitor — fetch items from all sources
+    from src import digest, monitor, scorer, synthesiser
+
+    # Stage 1: Monitor
     logger.info("Stage 1: Monitor — fetching items...")
-    items: list = []
-    starred: list = []
-    commits: list = []
-    logger.info("  Found %d items, %d starred repos, %d commits (stubbed)", len(items), len(starred), len(commits))
+    try:
+        items, starred, commits = monitor.fetch_all()
+        logger.info("  Found %d items, %d starred repos, %d commits", len(items), len(starred), len(commits))
+    except Exception as e:
+        logger.error("Stage 1 FAILED: %s", e)
+        items, starred, commits = [], [], []
 
-    # Stage 2: Score — rank items against profile + commits
+    # Stage 2: Score
     logger.info("Stage 2: Scorer — scoring items...")
-    scored: list = []
-    logger.info("  %d items passed scoring threshold (stubbed)", len(scored))
+    try:
+        scored, score_cost = scorer.score_items(items, commits, starred)
+        logger.info("  %d items passed scoring (cost: $%.4f)", len(scored), score_cost["cost_usd"])
+    except Exception as e:
+        logger.error("Stage 2 FAILED: %s", e)
+        scored, score_cost = [], {"input_tokens": 0, "output_tokens": 0, "cost_usd": 0.0}
 
-    # Stage 3: Synthesise — write personalised briefings
-    logger.info("Stage 3: Synthesiser — generating briefings...")
-    synthesised: list = []
-    logger.info("  %d briefings generated (stubbed)", len(synthesised))
-
-    # Stage 4: Digest — render and deliver
-    logger.info("Stage 4: Digest — rendering email...")
-    if dry_run:
-        logger.info("  [DRY RUN] Email would be sent here. No items to render yet.")
+    # Stage 3: Synthesise
+    if scored:
+        logger.info("Stage 3: Synthesiser — generating briefings...")
+        try:
+            synthesised, synth_cost = synthesiser.synthesise(scored, commits)
+            logger.info("  %d briefings generated (cost: $%.4f)", len(synthesised), synth_cost["cost_usd"])
+        except Exception as e:
+            logger.error("Stage 3 FAILED: %s", e)
+            synthesised, synth_cost = [], {"input_tokens": 0, "output_tokens": 0, "cost_usd": 0.0}
     else:
-        logger.info("  [LIVE] Email would be sent here. No items to render yet.")
+        logger.info("Stage 3: Skipped — no scored items (quiet day)")
+        synthesised, synth_cost = [], {"input_tokens": 0, "output_tokens": 0, "cost_usd": 0.0}
 
+    # Stage 4: Digest
+    logger.info("Stage 4: Digest — rendering and delivering...")
+    try:
+        digest.deliver(synthesised, dry_run=dry_run)
+    except Exception as e:
+        logger.error("Stage 4 FAILED: %s", e)
+
+    # Summary
+    total_cost = score_cost["cost_usd"] + synth_cost["cost_usd"]
     elapsed = (datetime.now() - start).total_seconds()
-    logger.info("=== Pipeline complete in %.1fs ===", elapsed)
+    logger.info("=== Pipeline complete in %.1fs | Total cost: $%.4f ===", elapsed, total_cost)
 
 
 if __name__ == "__main__":

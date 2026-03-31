@@ -1,1 +1,103 @@
-{# Email template — placeholder for Session 5 #}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Research Digest</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f4f4f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+
+<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f4f7;padding:24px 0;">
+<tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background-color:#ffffff;border-radius:8px;overflow:hidden;">
+
+<!-- Header -->
+<tr>
+<td style="background-color:#1a1a2e;padding:24px 32px;">
+  <h1 style="margin:0;color:#ffffff;font-size:22px;font-weight:600;">AI Research Digest</h1>
+  <p style="margin:4px 0 0;color:#a0a0b8;font-size:13px;">{{ date }} · {{ items | length }} item{{ 's' if items | length != 1 else '' }} for Rahil</p>
+</td>
+</tr>
+
+{% if items | length == 0 %}
+<!-- Quiet day -->
+<tr>
+<td style="padding:40px 32px;text-align:center;">
+  <p style="color:#555;font-size:16px;line-height:1.6;">Quiet day — nothing scored high enough to send. The pipeline ran successfully and will check again tomorrow.</p>
+</td>
+</tr>
+{% endif %}
+
+{% for item in items %}
+<!-- Item {{ loop.index }} -->
+<tr>
+<td style="padding:{{ '24px' if loop.first else '0' }} 32px 24px;{{ 'border-top:1px solid #eee;' if not loop.first else '' }}">
+
+  <!-- Score badge + headline -->
+  <table width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="40" valign="top" style="padding-right:12px;">
+      <span style="display:inline-block;width:36px;height:36px;line-height:36px;text-align:center;border-radius:50%;color:#fff;font-size:14px;font-weight:700;background-color:{{ '#10b981' if item.score >= 9 else '#0d9488' }};">{{ item.score }}</span>
+    </td>
+    <td>
+      <p style="margin:0;font-size:16px;font-weight:600;color:#1a1a2e;line-height:1.4;">{{ item.headline }}</p>
+    </td>
+  </tr>
+  </table>
+
+  {% if not item.forward_only and item.built_connection %}
+  <!-- Commit connection block -->
+  <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:12px;background-color:#f0fdf4;border-left:3px solid #10b981;border-radius:4px;">
+  <tr>
+  <td style="padding:12px 16px;">
+    <p style="margin:0 0 6px;font-size:13px;color:#166534;line-height:1.5;">
+      <strong>You built this manually:</strong> {{ item.built_connection }}
+    </p>
+    {% if item.time_saved %}
+    <p style="margin:0 0 6px;font-size:13px;color:#166534;line-height:1.5;">
+      <strong>This could have saved you:</strong> {{ item.time_saved }}
+    </p>
+    {% endif %}
+    {% if item.what_next %}
+    <p style="margin:0;font-size:13px;color:#166534;line-height:1.5;">
+      <strong>With that time:</strong> {{ item.what_next }}
+    </p>
+    {% endif %}
+  </td>
+  </tr>
+  </table>
+  {% endif %}
+
+  {% if item.forward_only %}
+  <p style="margin:12px 0 0;font-size:12px;color:#9ca3af;font-style:italic;">Forward recommendation — no direct match to your repos</p>
+  {% endif %}
+
+  <!-- CTA button -->
+  <table cellpadding="0" cellspacing="0" style="margin-top:14px;">
+  <tr>
+    <td style="background-color:#1a1a2e;border-radius:6px;">
+      <a href="{{ item.action }}" style="display:inline-block;padding:10px 20px;color:#ffffff;text-decoration:none;font-size:14px;font-weight:500;">{{ item.action_label | default('Read') }} &rarr;</a>
+    </td>
+  </tr>
+  </table>
+
+  <!-- Source + date -->
+  <p style="margin:10px 0 0;font-size:11px;color:#9ca3af;">{{ item.source }}{% if item.published %} · {{ item.published[:10] }}{% endif %}</p>
+
+</td>
+</tr>
+{% endfor %}
+
+<!-- Footer -->
+<tr>
+<td style="background-color:#f9fafb;padding:20px 32px;border-top:1px solid #eee;text-align:center;">
+  <p style="margin:0;font-size:12px;color:#9ca3af;">AI Research Assistant · <a href="https://github.com/rahilpopat" style="color:#6366f1;text-decoration:none;">github.com/rahilpopat</a></p>
+</td>
+</tr>
+
+</table>
+</td></tr>
+</table>
+
+</body>
+</html>
