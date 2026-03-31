@@ -1,0 +1,34 @@
+brave_queries:
+  - "Claude API new features 2025"
+  - "LLM agent framework open source"
+  - "MCP model context protocol server"
+  - "agentic AI Python tools"
+  - "Claude Code tips workflows"
+  - "LLM evaluation framework"
+  - "Anthropic announcement"
+  - "multi-agent systems tutorial"
+  - "AI developer tools launch"
+
+github_topics:
+  - llm-agents
+  - mcp-server
+  - claude-api
+  - anthropic
+  - langchain
+  - langgraph
+  - openai-agents
+  - ai-assistant
+  - prompt-engineering
+  - llm-tools
+
+rss_feeds:
+  - url: "https://hnrss.org/frontpage?q=LLM+AI+agent+Claude"
+    name: "Hacker News AI"
+  - url: "https://simonwillison.net/atom/everything/"
+    name: "Simon Willison"
+  - url: "https://www.anthropic.com/news/rss.xml"
+    name: "Anthropic Blog"
+  - url: "https://www.deeplearning.ai/the-batch/feed/"
+    name: "The Batch"
+  - url: "https://buttondown.com/ainews/rss"
+    name: "AI News"

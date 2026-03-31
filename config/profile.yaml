@@ -1,0 +1,43 @@
+user:
+  name: Rahil Popat
+  github: rahilpopat
+  role: AI Product Manager transitioning to AI Builder
+
+current_skills:
+  - Python (intermediate)
+  - Claude API and Anthropic SDK
+  - Prompt engineering
+  - Product strategy
+
+learning_objectives:
+  - Claude Code — building real projects end to end
+  - Agentic system design — multi-agent, memory, tool use, MCP servers
+  - Shipping Python projects to GitHub
+  - LLM evaluation patterns and frameworks
+  - Building in public
+
+active_projects:
+  - AI Research Assistant (this project)
+  - AXIS — personal AI research chat tool with GitHub skill-gap loop
+  - one-person-ai-company — agent system template repo
+  - FBA wholesale automation (Mountain View Global Ltd)
+
+interests:
+  - AI product strategy
+  - LLM benchmarks and capability evaluations
+  - MCP servers and tool ecosystems
+  - Open source AI tooling
+  - Claude Code workflows
+  - Agentic AI patterns — planning, memory, reflection, tool use
+
+exclude:
+  - healthcare AI
+  - medical imaging
+  - drug discovery
+  - image generation
+  - diffusion models
+  - stable diffusion
+  - AI hardware specs
+  - gaming AI
+  - robotics
+  - autonomous vehicles
