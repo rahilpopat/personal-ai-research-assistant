@@ -86,4 +86,26 @@
 - Pipeline: ~209s, $0.14 total cost
 - All 8 items name specific repos from commit history
 
-**Next session:** Session 6 — GitHub Actions workflow + hardening
+---
+
+## Session 6 — GitHub Actions + Hardening (2026-04-01)
+
+**What we built:**
+- `.github/workflows/daily-digest.yml` — full CI workflow with cron schedule (7am UTC daily) + manual dispatch
+- Python 3.11 setup, pip install, environment secrets injection
+- Artifact upload for logs on every run (pass or fail)
+- Workflow tested via manual dispatch — green run, email delivered successfully
+
+**Decisions made:**
+- Used `GH_TOKEN` secret name instead of `GITHUB_TOKEN` to avoid conflict with GitHub's built-in token
+- All secrets configured in repo settings: ANTHROPIC_API_KEY, BRAVE_API_KEY, GH_TOKEN, EMAIL_TO, SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, SENDGRID_API_KEY
+- `upload-artifact@v4` with `if: always()` ensures logs are captured even on failure
+
+**Verify result:**
+- Manual workflow dispatch → green ✓
+- Email arrived in inbox with personalised digest
+- Logs uploaded as artifact
+
+**Project status:** All 6 sessions complete. Pipeline runs daily via GitHub Actions.
+
+**Next:** Monitor for 2 weeks against Phase 2 gate criteria before adding new features.
